@@ -69,7 +69,8 @@ while True:
         if dt <= lastdate:
             print 'already processed this date, skipping....'
             continue
-            
+        else:
+            lastdate = dt
         
         #print edit
         
