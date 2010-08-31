@@ -110,6 +110,5 @@ while True:
         print
         time.sleep(1)
     
-    print 'sleeping 30 seconds'
-    time.sleep(30)
-    
+    print 'sleeping 60 seconds'
+    time.sleep(60)
