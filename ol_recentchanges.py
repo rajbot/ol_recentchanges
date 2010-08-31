@@ -10,7 +10,7 @@ sys.path.append('/petabox/sw/lib/python')
 import simplejson as json
 
 def get_recent_changes():
-    f = urllib.urlopen("http://openlibrary.org/recentchanges.json?bot=false")
+    f = urllib.urlopen("http://openlibrary.org/recentchanges.json?bot=false&limit=100")
     contents = f.read()
     f.close()
     
