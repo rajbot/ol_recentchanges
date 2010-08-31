@@ -14,9 +14,14 @@ def get_recent_changes():
     contents = f.read()
     f.close()
     
-    obj = json.loads(contents)
-    #print obj
-    return obj
+    try:
+        obj = json.loads(contents)
+    except ValueError:
+        print 'got ValueError trying to deserialize contents: ' + contents
+        return None
+    else:
+        #print obj
+        return obj
     
 def get_title(key):
     f = urllib.urlopen("http://openlibrary.org" + key + '.json')
@@ -55,10 +60,16 @@ irc = irclib.IRC()
 server = irc.server()
 server.connect("irc.freenode.net", 6667, "ol_rc")
 server.join("#openlibrary_rc", 'hi')
-time.sleep(10)
 
 while True:
+    irc.process_once()
+    print 'sleeping 60 seconds'
+    time.sleep(60)
+    
     rc = get_recent_changes()
+    if None == rc:
+        continue
+        
     rc.reverse()
     
     numEdits = len(rc)
@@ -115,6 +126,4 @@ while True:
         print
         time.sleep(1)
     
-    irc.process_once()
-    print 'sleeping 60 seconds'
-    time.sleep(60)
+
