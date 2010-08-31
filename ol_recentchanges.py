@@ -23,12 +23,18 @@ def get_title(key):
     contents = f.read()
     f.close()   
     
-    obj = json.loads(contents)
-    #print obj
-    if 'title' in obj:
-        return obj['title']
-    else:
+    try:
+        obj = json.loads(contents)
+    except ValueError:
         return '(no title)'
+    else:
+        #print obj
+        if '/type/author' == obj['type']['key']:
+            return obj['name']
+        elif 'title' in obj:
+            return obj['title']
+        else:
+            return key
 
 #sigh... python 2.5's strptime doesn't support %f
 #from http://stackoverflow.com/questions/531157/parsing-datetime-strings-with-microseconds:
