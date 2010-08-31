@@ -75,8 +75,8 @@ while True:
         if dt <= lastdate:
             print 'already processed this date, skipping....'
             continue
-        else:
-            lastdate = dt
+
+        lastdate = dt
         
         #print edit
         
@@ -111,10 +111,10 @@ while True:
         change = '[[%s]] %s * %s (%s) /* %s */' % (title, diffUrl, user, timestamp, comment)
 
         server.privmsg("#openlibrary_rc", change.encode('ascii', 'ignore'))
-        irc.process_once()
         print change
         print
         time.sleep(1)
     
+    irc.process_once()
     print 'sleeping 60 seconds'
     time.sleep(60)
