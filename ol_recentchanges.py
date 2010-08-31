@@ -10,7 +10,12 @@ sys.path.append('/petabox/sw/lib/python')
 import simplejson as json
 
 def get_recent_changes():
-    f = urllib.urlopen("http://openlibrary.org/recentchanges.json?bot=false&limit=100")
+    try:
+        f = urllib.urlopen("http://openlibrary.org/recentchanges.json?bot=false&limit=100")
+    except IOError:
+        print "get_recent_changes() Connection timed out"
+        return None
+    
     contents = f.read()
     f.close()
     
@@ -24,7 +29,12 @@ def get_recent_changes():
         return obj
     
 def get_title(key):
-    f = urllib.urlopen("http://openlibrary.org" + key + '.json')
+    try:
+        f = urllib.urlopen("http://openlibrary.org" + key + '.json')
+    except IOError:
+        print "get_title() Connection timed out"
+        return key
+        
     contents = f.read()
     f.close()   
     
