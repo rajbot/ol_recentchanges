@@ -50,8 +50,11 @@ def str2datetime(s):
 
 def get_latest_timestamp():
     rc = get_recent_changes()
-    timestamp = rc[0]['timestamp']
-    return str2datetime(timestamp)
+    if None == rc:
+        return datetime.min
+    else:
+        timestamp = rc[0]['timestamp']
+        return str2datetime(timestamp)
 
 lastdate = get_latest_timestamp()
 
@@ -91,24 +94,6 @@ while True:
         
         #print edit
         
-        numChanges = len(edit['changes'])
-
-        if 1 == numChanges:            
-            c = edit['changes'][0]
-            
-            title = get_title(c['key'])
-            
-            b = int(c['revision'])
-            if 1 == b:
-                a = 1
-            else:
-                a = b-1
-            
-            diffUrl = 'http://openlibrary.org%s?b=%d&a=%d&_compare=Compare&m=diff' % (c['key'], b, a)
-        else:
-            
-            title = '(%d changes)' % numChanges
-            diffUrl  = '-'
 
         author = edit['author']
         if author:
@@ -119,11 +104,25 @@ while True:
             user = edit['ip']        
            
         comment = edit['comment']
-        change = '[[%s]] %s * %s (%s) /* %s */' % (title, diffUrl, user, timestamp, comment)
-
-        server.privmsg("#openlibrary_rc", change.encode('ascii', 'ignore'))
-        print change
-        print
-        time.sleep(1)
+        
+        numChanges = len(edit['changes'])
+        print "  got %d changes" % (numChanges)
+        
+        for c in edit['changes']:            
+            title = get_title(c['key'])
+            
+            b = int(c['revision'])
+            if 1 == b:
+                a = 1
+            else:
+                a = b-1
+            
+            diffUrl = 'http://openlibrary.org%s?b=%d&a=%d&_compare=Compare&m=diff' % (c['key'], b, a)
+        
+            change = '[[%s]] %s * %s (%s) /* %s */' % (title, diffUrl, user, timestamp, comment)
     
-
+            server.privmsg("#openlibrary_rc", change.encode('ascii', 'ignore'))
+            print change
+            print
+            time.sleep(1)
+    
