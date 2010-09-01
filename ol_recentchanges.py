@@ -118,7 +118,7 @@ while True:
         numChanges = len(edit['changes'])
         print "  got %d changes" % (numChanges)
         
-        for c in edit['changes']:            
+        for c in edit['changes'][0:10]: #limit to 10 to avoid irc flood
             title = get_title(c['key'])
             
             b = int(c['revision'])
